@@ -6,11 +6,18 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Valid;
 
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
  */
 #[ApiResource(
+    collectionOperations: [
+        'get',
+        'post'
+    ],
     itemOperations: [
     'get' => [
         'normalization_context' => ['groups' => ['read:collection', 'read:item', 'read:Post']],
@@ -19,7 +26,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     'delete',
 ],
     denormalizationContext: ['groups' => ['write:Post']],
-    normalizationContext: ['groups' => ['read:collection']],
+    normalizationContext: ['groups' => ['read:collection']]
 )]
 class Post
 {
@@ -34,13 +41,21 @@ class Post
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:collection', 'write:Post'])]
+    #[
+        Groups(['read:collection', 'write:Post']),
+        Length(min: 4, groups: ['create:Post']),
+        NotBlank(),
+    ]
     private string $title;
     
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:collection', 'write:Post'])]
+    #[
+        Groups(['read:collection', 'write:Post']),
+        Length(min: 4, groups: ['create:Post']),
+    ]
+    
     private string $slug;
     
     /**
@@ -61,9 +76,12 @@ class Post
     private \DateTimeInterface $updatedAt;
     
     /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="posts")
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="posts", cascade="persist")
      */
-    #[Groups(['read:item', 'write:Post'])]
+    #[
+        Groups(['read:item', 'write:Post']),
+        Valid()
+    ]
     private ?Category $category = null;
     
     
@@ -73,6 +91,10 @@ class Post
         $this->updatedAt = new \DateTime();
     }
     
+    public static function validationGroups(self $post)
+    {
+           return ['create:Post'];
+    }
     
     public function getId(): ?int
     {
