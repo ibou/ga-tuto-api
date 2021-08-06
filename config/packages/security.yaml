@@ -33,6 +33,10 @@ security:
             stateless: true
             jwt: ~
             provider: jwt
+
+        api_token_refresh:
+            pattern: ^/api/token/refresh
+            stateless: true
         #main:
             #lazy: true
             #provider:
@@ -52,3 +56,4 @@ security:
     access_control:
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api,       roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY }
