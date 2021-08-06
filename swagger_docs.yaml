@@ -216,56 +216,6 @@
             "parameters": []
         },
         "/api/categories/{id}": {
-            "get": {
-                "operationId": "getCategoryItem",
-                "tags": [
-                    "Category"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Category resource",
-                        "content": {
-                            "application/ld+json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Category.jsonld"
-                                }
-                            },
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Category"
-                                }
-                            },
-                            "text/html": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Category"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Resource not found"
-                    }
-                },
-                "summary": "Retrieves a Category resource.",
-                "description": "Retrieves a Category resource.",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "Resource identifier",
-                        "required": true,
-                        "deprecated": false,
-                        "allowEmptyValue": false,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "style": "simple",
-                        "explode": false,
-                        "allowReserved": false
-                    }
-                ],
-                "deprecated": false
-            },
             "put": {
                 "operationId": "putCategoryItem",
                 "tags": [
@@ -291,15 +241,7 @@
                                 }
                             }
                         },
-                        "links": {
-                            "GetCategoryItem": {
-                                "operationId": "getCategoryItem",
-                                "parameters": {
-                                    "id": "$response.body#/id"
-                                },
-                                "description": "The `id` value returned in the response can be used as the `id` parameter in `GET /api/categories/{id}`."
-                            }
-                        }
+                        "links": {}
                     },
                     "400": {
                         "description": "Invalid input"
@@ -410,15 +352,7 @@
                                 }
                             }
                         },
-                        "links": {
-                            "GetCategoryItem": {
-                                "operationId": "getCategoryItem",
-                                "parameters": {
-                                    "id": "$response.body#/id"
-                                },
-                                "description": "The `id` value returned in the response can be used as the `id` parameter in `GET /api/categories/{id}`."
-                            }
-                        }
+                        "links": {}
                     },
                     "400": {
                         "description": "Invalid input"
@@ -460,6 +394,487 @@
                     "required": true
                 },
                 "deprecated": false
+            },
+            "parameters": []
+        },
+        "/api/dependencies": {
+            "get": {
+                "operationId": "getDependencyCollection",
+                "tags": [
+                    "Dependency"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dependency collection",
+                        "content": {
+                            "application/ld+json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "hydra:member": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Dependency.jsonld"
+                                            }
+                                        },
+                                        "hydra:totalItems": {
+                                            "type": "integer",
+                                            "minimum": 0
+                                        },
+                                        "hydra:view": {
+                                            "type": "object",
+                                            "properties": {
+                                                "@id": {
+                                                    "type": "string",
+                                                    "format": "iri-reference"
+                                                },
+                                                "@type": {
+                                                    "type": "string"
+                                                },
+                                                "hydra:first": {
+                                                    "type": "string",
+                                                    "format": "iri-reference"
+                                                },
+                                                "hydra:last": {
+                                                    "type": "string",
+                                                    "format": "iri-reference"
+                                                },
+                                                "hydra:previous": {
+                                                    "type": "string",
+                                                    "format": "iri-reference"
+                                                },
+                                                "hydra:next": {
+                                                    "type": "string",
+                                                    "format": "iri-reference"
+                                                }
+                                            }
+                                        },
+                                        "hydra:search": {
+                                            "type": "object",
+                                            "properties": {
+                                                "@type": {
+                                                    "type": "string"
+                                                },
+                                                "hydra:template": {
+                                                    "type": "string"
+                                                },
+                                                "hydra:variableRepresentation": {
+                                                    "type": "string"
+                                                },
+                                                "hydra:mapping": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "@type": {
+                                                                "type": "string"
+                                                            },
+                                                            "variable": {
+                                                                "type": "string"
+                                                            },
+                                                            "property": {
+                                                                "type": "string",
+                                                                "nullable": true
+                                                            },
+                                                            "required": {
+                                                                "type": "boolean"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "required": [
+                                        "hydra:member"
+                                    ]
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Dependency"
+                                    }
+                                }
+                            },
+                            "text/html": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Dependency"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "Retrieves the collection of Dependency resources.",
+                "description": "Retrieves the collection of Dependency resources.",
+                "parameters": [],
+                "deprecated": false
+            },
+            "post": {
+                "operationId": "postDependencyCollection",
+                "tags": [
+                    "Dependency"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Dependency resource created",
+                        "content": {
+                            "application/ld+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Dependency.jsonld"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Dependency"
+                                }
+                            },
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Dependency"
+                                }
+                            }
+                        },
+                        "links": {
+                            "GetDependencyItem": {
+                                "operationId": "getDependencyItem",
+                                "parameters": {
+                                    "uuid": "$response.body#/uuid"
+                                },
+                                "description": "The `uuid` value returned in the response can be used as the `uuid` parameter in `GET /api/dependencies/{uuid}`."
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                },
+                "summary": "Creates a Dependency resource.",
+                "description": "Creates a Dependency resource.",
+                "parameters": [],
+                "requestBody": {
+                    "description": "The new Dependency resource",
+                    "content": {
+                        "application/ld+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Dependency.jsonld"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Dependency"
+                            }
+                        },
+                        "text/html": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Dependency"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "deprecated": false
+            },
+            "parameters": []
+        },
+        "/api/dependencies/{uuid}": {
+            "get": {
+                "operationId": "getDependencyItem",
+                "tags": [
+                    "Dependency"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dependency resource",
+                        "content": {
+                            "application/ld+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Dependency.jsonld"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Dependency"
+                                }
+                            },
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Dependency"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                },
+                "summary": "Retrieves a Dependency resource.",
+                "description": "Retrieves a Dependency resource.",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "Resource identifier",
+                        "required": true,
+                        "deprecated": false,
+                        "allowEmptyValue": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "style": "simple",
+                        "explode": false,
+                        "allowReserved": false
+                    }
+                ],
+                "deprecated": false
+            },
+            "put": {
+                "operationId": "putDependencyItem",
+                "tags": [
+                    "Dependency"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dependency resource updated",
+                        "content": {
+                            "application/ld+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Dependency.jsonld"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Dependency"
+                                }
+                            },
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Dependency"
+                                }
+                            }
+                        },
+                        "links": {
+                            "GetDependencyItem": {
+                                "operationId": "getDependencyItem",
+                                "parameters": {
+                                    "uuid": "$response.body#/uuid"
+                                },
+                                "description": "The `uuid` value returned in the response can be used as the `uuid` parameter in `GET /api/dependencies/{uuid}`."
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                },
+                "summary": "Replaces the Dependency resource.",
+                "description": "Replaces the Dependency resource.",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "Resource identifier",
+                        "required": true,
+                        "deprecated": false,
+                        "allowEmptyValue": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "style": "simple",
+                        "explode": false,
+                        "allowReserved": false
+                    }
+                ],
+                "requestBody": {
+                    "description": "The updated Dependency resource",
+                    "content": {
+                        "application/ld+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Dependency.jsonld-put.dependency"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Dependency-put.dependency"
+                            }
+                        },
+                        "text/html": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Dependency-put.dependency"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "deprecated": false
+            },
+            "delete": {
+                "operationId": "deleteDependencyItem",
+                "tags": [
+                    "Dependency"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Dependency resource deleted"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                },
+                "summary": "Removes the Dependency resource.",
+                "description": "Removes the Dependency resource.",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "Resource identifier",
+                        "required": true,
+                        "deprecated": false,
+                        "allowEmptyValue": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "style": "simple",
+                        "explode": false,
+                        "allowReserved": false
+                    }
+                ],
+                "deprecated": false
+            },
+            "parameters": []
+        },
+        "/api/me": {
+            "get": {
+                "operationId": "meUserCollection",
+                "tags": [
+                    "User"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User collection",
+                        "content": {
+                            "application/ld+json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "hydra:member": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/User.jsonld-read.user"
+                                            }
+                                        },
+                                        "hydra:totalItems": {
+                                            "type": "integer",
+                                            "minimum": 0
+                                        },
+                                        "hydra:view": {
+                                            "type": "object",
+                                            "properties": {
+                                                "@id": {
+                                                    "type": "string",
+                                                    "format": "iri-reference"
+                                                },
+                                                "@type": {
+                                                    "type": "string"
+                                                },
+                                                "hydra:first": {
+                                                    "type": "string",
+                                                    "format": "iri-reference"
+                                                },
+                                                "hydra:last": {
+                                                    "type": "string",
+                                                    "format": "iri-reference"
+                                                },
+                                                "hydra:previous": {
+                                                    "type": "string",
+                                                    "format": "iri-reference"
+                                                },
+                                                "hydra:next": {
+                                                    "type": "string",
+                                                    "format": "iri-reference"
+                                                }
+                                            }
+                                        },
+                                        "hydra:search": {
+                                            "type": "object",
+                                            "properties": {
+                                                "@type": {
+                                                    "type": "string"
+                                                },
+                                                "hydra:template": {
+                                                    "type": "string"
+                                                },
+                                                "hydra:variableRepresentation": {
+                                                    "type": "string"
+                                                },
+                                                "hydra:mapping": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "@type": {
+                                                                "type": "string"
+                                                            },
+                                                            "variable": {
+                                                                "type": "string"
+                                                            },
+                                                            "property": {
+                                                                "type": "string",
+                                                                "nullable": true
+                                                            },
+                                                            "required": {
+                                                                "type": "boolean"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "required": [
+                                        "hydra:member"
+                                    ]
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User-read.user"
+                                    }
+                                }
+                            },
+                            "text/html": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User-read.user"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "Retrieves the collection of User resources.",
+                "description": "Retrieves the collection of User resources.",
+                "parameters": [],
+                "deprecated": false,
+                "security": {
+                    "cookieAuth": []
+                }
             },
             "parameters": []
         },
@@ -735,7 +1150,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Ok",
+                        "description": "Nombre d'articles publi\u00e9s",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1020,6 +1435,9 @@
                 "deprecated": false
             },
             "parameters": []
+        },
+        "/api/users/{id}": {
+            "parameters": []
         }
     },
     "components": {
@@ -1215,6 +1633,146 @@
                     },
                     "name": {
                         "minLength": 5,
+                        "type": "string"
+                    }
+                }
+            },
+            "Dependency": {
+                "type": "object",
+                "properties": {
+                    "uuid": {
+                        "readOnly": true,
+                        "type": "string"
+                    },
+                    "name": {
+                        "minLength": 2,
+                        "description": "Nom de la dependance",
+                        "type": "string"
+                    },
+                    "version": {
+                        "example": "5.3.*",
+                        "description": "Version de la d\u00e9pendance",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "version"
+                ]
+            },
+            "Dependency-put.dependency": {
+                "type": "object",
+                "required": [
+                    "version"
+                ],
+                "properties": {
+                    "version": {
+                        "example": "5.3.*",
+                        "description": "Version de la d\u00e9pendance",
+                        "type": "string"
+                    }
+                }
+            },
+            "Dependency.jsonld": {
+                "type": "object",
+                "properties": {
+                    "@context": {
+                        "readOnly": true,
+                        "oneOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "@vocab": {
+                                        "type": "string"
+                                    },
+                                    "hydra": {
+                                        "type": "string",
+                                        "enum": [
+                                            "http://www.w3.org/ns/hydra/core#"
+                                        ]
+                                    }
+                                },
+                                "required": [
+                                    "@vocab",
+                                    "hydra"
+                                ],
+                                "additionalProperties": true
+                            }
+                        ]
+                    },
+                    "@id": {
+                        "readOnly": true,
+                        "type": "string"
+                    },
+                    "@type": {
+                        "readOnly": true,
+                        "type": "string"
+                    },
+                    "uuid": {
+                        "readOnly": true,
+                        "type": "string"
+                    },
+                    "name": {
+                        "minLength": 2,
+                        "description": "Nom de la dependance",
+                        "type": "string"
+                    },
+                    "version": {
+                        "example": "5.3.*",
+                        "description": "Version de la d\u00e9pendance",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "version"
+                ]
+            },
+            "Dependency.jsonld-put.dependency": {
+                "type": "object",
+                "required": [
+                    "version"
+                ],
+                "properties": {
+                    "@context": {
+                        "readOnly": true,
+                        "oneOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "@vocab": {
+                                        "type": "string"
+                                    },
+                                    "hydra": {
+                                        "type": "string",
+                                        "enum": [
+                                            "http://www.w3.org/ns/hydra/core#"
+                                        ]
+                                    }
+                                },
+                                "required": [
+                                    "@vocab",
+                                    "hydra"
+                                ],
+                                "additionalProperties": true
+                            }
+                        ]
+                    },
+                    "@id": {
+                        "readOnly": true,
+                        "type": "string"
+                    },
+                    "@type": {
+                        "readOnly": true,
+                        "type": "string"
+                    },
+                    "version": {
+                        "example": "5.3.*",
+                        "description": "Version de la d\u00e9pendance",
                         "type": "string"
                     }
                 }
@@ -1497,6 +2055,32 @@
                         ]
                     }
                 }
+            },
+            "User-read.user": {
+                "type": "object",
+                "description": "",
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    }
+                }
+            },
+            "User.jsonld-read.user": {
+                "type": "object",
+                "description": "",
+                "properties": {
+                    "@id": {
+                        "readOnly": true,
+                        "type": "string"
+                    },
+                    "@type": {
+                        "readOnly": true,
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    }
+                }
             }
         },
         "responses": {},
@@ -1504,7 +2088,13 @@
         "examples": {},
         "requestBodies": {},
         "headers": {},
-        "securitySchemes": {}
+        "securitySchemes": {
+            "cookieAuth": {
+                "type": "apiKey",
+                "in": "cookie",
+                "name": "PHPSESSID"
+            }
+        }
     },
     "security": [],
     "tags": []
