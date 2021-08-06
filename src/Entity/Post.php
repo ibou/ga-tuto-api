@@ -43,7 +43,7 @@ use Symfony\Component\Validator\Constraints\Valid;
                     'description' => 'Filtre les articles en ligne',
                 ],
             ],
-            
+
             'responses' => [
                 '200' => [
                     'description' => 'Nombre d\'articles publiés',
@@ -84,7 +84,7 @@ use Symfony\Component\Validator\Constraints\Valid;
                     ],
                 ],
             ],
-        
+
         ],
     ],
 ],
@@ -109,7 +109,7 @@ class Post
      */
     #[Groups(['read:collection'])]
     private int $id;
-    
+
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -119,7 +119,7 @@ class Post
         NotBlank(),
     ]
     private string $title;
-    
+
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -128,24 +128,24 @@ class Post
         Length(min: 4, groups: ['create:Post']),
     ]
     private string $slug;
-    
+
     /**
      * @ORM\Column(type="text")
      */
     #[Groups(['read:item', 'write:Post'])]
     private string $content;
-    
+
     /**
      * @ORM\Column(type="datetime")
      */
     #[Groups(['read:item'])]
     private \DateTimeInterface $createdAt;
-    
+
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private \DateTimeInterface $updatedAt;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="posts", cascade={"persist"})
      */
@@ -154,7 +154,7 @@ class Post
         Valid()
     ]
     private ?Category $category = null;
-    
+
     /**
      * @ORM\Column(type="boolean", options={"default": 0})
      */
@@ -166,105 +166,105 @@ class Post
         ])
     ]
     private bool $online = false;
-    
-    
+
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
     }
-    
+
     public static function validationGroups(self $post): array
     {
         return ['create:Post'];
     }
-    
+
     public function getId(): ?int
     {
         return $this->id;
     }
-    
+
     public function getTitle(): ?string
     {
         return $this->title;
     }
-    
+
     public function setTitle(string $title): self
     {
         $this->title = $title;
-        
+
         return $this;
     }
-    
+
     public function getSlug(): ?string
     {
         return $this->slug;
     }
-    
+
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
-        
+
         return $this;
     }
-    
+
     public function getContent(): ?string
     {
         return $this->content;
     }
-    
+
     public function setContent(string $content): self
     {
         $this->content = $content;
-        
+
         return $this;
     }
-    
+
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
-    
+
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
-        
+
         return $this;
     }
-    
+
     public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
     }
-    
+
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
-        
+
         return $this;
     }
-    
+
     public function getCategory(): ?Category
     {
         return $this->category;
     }
-    
+
     public function setCategory(?Category $category = null): self
     {
         $this->category = $category;
-        
+
         return $this;
     }
-    
+
     public function getOnline(): ?bool
     {
         return $this->online;
     }
-    
+
     public function setOnline(bool $online): self
     {
         $this->online = $online;
-        
+
         return $this;
     }
 }

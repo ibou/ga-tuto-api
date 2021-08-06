@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Ramsey\Uuid\Uuid;
@@ -48,8 +47,8 @@ class Dependency
         Groups(['put:dependency'])
     ]
     private string $version;
-    
-    
+
+
     public function __construct(
         string $name,
         string $version
@@ -58,7 +57,7 @@ class Dependency
         $this->name = $name;
         $this->version = $version;
     }
-    
+
     /**
      * @return string
      */
@@ -66,7 +65,7 @@ class Dependency
     {
         return $this->uuid;
     }
-    
+
     /**
      * @return string
      */
@@ -74,7 +73,7 @@ class Dependency
     {
         return $this->name;
     }
-    
+
     /**
      * @return string
      */
@@ -82,11 +81,9 @@ class Dependency
     {
         return $this->version;
     }
-    
+
     public function setVersion(string $version): void
     {
         $this->version = $version;
     }
-    
-    
 }
