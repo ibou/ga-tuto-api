@@ -66,6 +66,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
      * @ORM\Column(type="string")
      */
     private string $password;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    #[Groups(['read:user'])]
+    private $apiKey;
     
     public static function createFromPayload($id, array $payload)
     {
@@ -169,5 +175,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getApiKey(): ?string
+    {
+        return $this->apiKey;
+    }
+
+    public function setApiKey(?string $apiKey): self
+    {
+        $this->apiKey = $apiKey;
+
+        return $this;
     }
 }

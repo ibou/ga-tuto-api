@@ -12,6 +12,11 @@ security:
                 class: App\Entity\User
                 property: email
 
+        api_key_user_provider:
+            entity:
+                class: App\Entity\User
+                property: apiKey
+
         jwt:
             lexik_jwt:
                 class: App\Entity\User
@@ -19,24 +24,31 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        login:
-            pattern: ^/api/login
-            stateless: true
-            provider: app_user_provider
-            json_login:
-                check_path: api_login
-                success_handler: lexik_jwt_authentication.handler.authentication_success
-                failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
-        api:
-            pattern:   ^/api
-            stateless: true
-            jwt: ~
-            provider: jwt
+        apikey:
+            provider: api_key_user_provider
+            guard:
+                authenticators:
+                    - App\Security\ApiKeyTokenAuthenticator
 
-        api_token_refresh:
-            pattern: ^/api/token/refresh
-            stateless: true
+        #login:
+        #    pattern: ^/api/login
+        #    stateless: true
+        #    provider: app_user_provider
+        #    json_login:
+        #        check_path: api_login
+        #        success_handler: lexik_jwt_authentication.handler.authentication_success
+        #        failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        #
+        #api:
+        #    pattern:   ^/api
+        #    stateless: true
+        #    jwt: ~
+        #    provider: jwt
+        #
+        #api_token_refresh:
+        #    pattern: ^/api/token/refresh
+        #    stateless: true
         #main:
             #lazy: true
             #provider:
