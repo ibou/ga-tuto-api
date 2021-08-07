@@ -135,7 +135,7 @@ class Post implements UserOwnedInterface
     /**
      * @ORM\Column(type="text")
      */
-    #[Groups(['read:item', 'write:Post'])]
+    #[Groups(['read:item','read:collection', 'write:Post'])]
     private string $content;
     
     /**
@@ -153,7 +153,7 @@ class Post implements UserOwnedInterface
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="posts", cascade={"persist"})
      */
     #[
-        Groups(['read:item', 'write:Post']),
+        Groups(['read:item','read:collection', 'write:Post']),
         Valid()
     ]
     private ?Category $category = null;
