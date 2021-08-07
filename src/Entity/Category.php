@@ -24,13 +24,13 @@ use Symfony\Component\Validator\Constraints\Length;
             'controller' => NotFoundAction::class,
             'read' => false,
             'output' => false,
-            'openapi_context'=>[
-                'summary'=>'hidden'
-            ]
+            'openapi_context' => [
+                'summary' => 'hidden',
+            ],
         ],
     ]
 )]
-class Category
+class Category implements UserOwnedInterface
 {
     /**
      * @ORM\Id
@@ -39,7 +39,7 @@ class Category
      */
     #[Groups(['read:Post'])]
     private int $id;
-
+    
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -48,52 +48,55 @@ class Category
         Length(min: 5)
     ]
     private ?string $name;
-
+    
     /**
      * @ORM\OneToMany(targetEntity=Post::class, mappedBy="category")
      */
     private $posts;
-
+    
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="categories")
+     */
+    private $user;
+    
     public function __construct()
     {
         $this->posts = new ArrayCollection();
     }
-
+    
     public function getId(): ?int
     {
         return $this->id;
     }
-
+    
     public function getName(): ?string
     {
         return $this->name;
     }
-
+    
     public function setName(string $name): self
     {
         $this->name = $name;
-
+        
         return $this;
     }
-
-    /**
-     * @return Collection|Post[]
-     */
+    
+ 
     public function getPosts(): Collection
     {
         return $this->posts;
     }
-
+    
     public function addPost(Post $post): self
     {
         if (!$this->posts->contains($post)) {
             $this->posts[] = $post;
             $post->setCategory($this);
         }
-
+        
         return $this;
     }
-
+    
     public function removePost(Post $post): self
     {
         if ($this->posts->removeElement($post)) {
@@ -102,7 +105,19 @@ class Category
                 $post->setCategory(null);
             }
         }
-
+        
+        return $this;
+    }
+    
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+    
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+        
         return $this;
     }
 }

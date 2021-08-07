@@ -6,6 +6,8 @@ use ApiPlatform\Core\Action\NotFoundAction;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\MeController;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -72,6 +74,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
      */
     #[Groups(['read:user'])]
     private $apiKey;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Post::class, mappedBy="user")
+     */
+    private $posts;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Category::class, mappedBy="user")
+     */
+    private $categories;
+
+    public function __construct()
+    {
+        $this->posts = new ArrayCollection();
+        $this->categories = new ArrayCollection();
+    }
     
     public static function createFromPayload($id, array $payload)
     {
@@ -185,6 +203,63 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
     public function setApiKey(?string $apiKey): self
     {
         $this->apiKey = $apiKey;
+
+        return $this;
+    }
+ 
+    public function getPosts(): Collection
+    {
+        return $this->posts;
+    }
+
+    public function addPost(Post $post): self
+    {
+        if (!$this->posts->contains($post)) {
+            $this->posts[] = $post;
+            $post->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePost(Post $post): self
+    {
+        if ($this->posts->removeElement($post)) {
+            // set the owning side to null (unless already changed)
+            if ($post->getUser() === $this) {
+                $post->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Category[]
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): self
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories[] = $category;
+            $category->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): self
+    {
+        if ($this->categories->removeElement($category)) {
+            // set the owning side to null (unless already changed)
+            if ($category->getUser() === $this) {
+                $category->setUser(null);
+            }
+        }
 
         return $this;
     }
