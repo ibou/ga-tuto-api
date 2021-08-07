@@ -73,12 +73,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     #[Groups(['read:user'])]
-    private $apiKey;
+    private ?string $apiKey;
 
     /**
      * @ORM\OneToMany(targetEntity=Post::class, mappedBy="user")
      */
-    private $posts;
+    private  $posts;
 
     /**
      * @ORM\OneToMany(targetEntity=Category::class, mappedBy="user")

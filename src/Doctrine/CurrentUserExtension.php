@@ -25,12 +25,14 @@ class CurrentUserExtension implements QueryCollectionExtensionInterface, QueryIt
     
     private function addWhere(string $resourceClass, QueryBuilder $queryBuilder)
     {
+        return;
         $reflexionClass = new \ReflectionClass($resourceClass);
         if (!$reflexionClass->implementsInterface(UserOwnedInterface::class)) {
             return;
         }
         $user = $this->security->getUser();
         $alias = $queryBuilder->getRootAliases()[0];
+       
         if ($user) {
             $queryBuilder
                 ->andWhere("${alias}.user = :current_user")

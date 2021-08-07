@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Attribute\ApiAuthGroups;
 use App\Controller\PostCountController;
 use App\Controller\PostPublishController;
 use App\Repository\PostRepository;
@@ -102,7 +103,13 @@ use Symfony\Component\Validator\Constraints\Valid;
             "id" => "exact",
             "title" => "partial",
         ]
-    )]
+    ),
+    
+    ApiAuthGroups([
+        'CAN_EDIT' => ['read:collection:owner'],
+        'ROLE_USER' => ['read:collection:user'],
+    ])
+]
 class Post implements UserOwnedInterface
 {
     /**
@@ -127,7 +134,7 @@ class Post implements UserOwnedInterface
      * @ORM\Column(type="string", length=255)
      */
     #[
-        Groups(['read:collection', 'write:Post']),
+        Groups(['read:collection:owner', 'write:Post']),
         Length(min: 4, groups: ['create:Post']),
     ]
     private string $slug;
@@ -135,7 +142,7 @@ class Post implements UserOwnedInterface
     /**
      * @ORM\Column(type="text")
      */
-    #[Groups(['read:item','read:collection', 'write:Post'])]
+    #[Groups(['read:item', 'write:Post'])]
     private string $content;
     
     /**
@@ -153,7 +160,7 @@ class Post implements UserOwnedInterface
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="posts", cascade={"persist"})
      */
     #[
-        Groups(['read:item','read:collection', 'write:Post']),
+        Groups(['read:item', 'write:Post']),
         Valid()
     ]
     private ?Category $category = null;
@@ -162,17 +169,20 @@ class Post implements UserOwnedInterface
      * @ORM\Column(type="boolean", options={"default": 0})
      */
     #[
-        Groups(['read:collection']),
+        Groups(['read:collection:owner']),
         ApiProperty(openapiContext: [
             'type' => 'boolean',
             'description' => 'Est en ligne ?',
         ])
     ]
     private bool $online = false;
-
+    
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="posts")
      */
+    #[
+        Groups(['read:collection:user']),
+    ]
     private $user;
     
     
@@ -275,16 +285,16 @@ class Post implements UserOwnedInterface
         
         return $this;
     }
-
+    
     public function getUser(): ?User
     {
         return $this->user;
     }
-
+    
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
+        
         return $this;
     }
 }

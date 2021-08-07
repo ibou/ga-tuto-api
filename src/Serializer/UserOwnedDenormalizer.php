@@ -44,10 +44,6 @@ class UserOwnedDenormalizer implements
         return $object;
     }
     
-    private function getAlreadyCalledKey($type)
-    {
-    
-        return self::ALREADY_CALLED_DENORMALIZER. $type;
-    }
+   
     
 }
