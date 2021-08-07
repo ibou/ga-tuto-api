@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security;
 
 use App\Repository\UserRepository;
@@ -15,8 +17,6 @@ use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 class ApiKeyTokenAuthenticator extends AbstractGuardAuthenticator
 {
     
-
-    
     
     public function __construct(private UserRepository $userRepository)
     {
@@ -26,12 +26,12 @@ class ApiKeyTokenAuthenticator extends AbstractGuardAuthenticator
     {
         $data = [
             // you might translate this message
-            'message' => 'Authentication Required'
+            'message' => 'Authentication Required',
         ];
         
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
     }
- 
+    
     public function supports(Request $request): bool
     {
         return $request->headers->has('X-AUTH-TOKEN');
@@ -69,13 +69,13 @@ class ApiKeyTokenAuthenticator extends AbstractGuardAuthenticator
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         $data = [
-            'message' => strtr($exception->getMessageKey(), $exception->getMessageData())
+            'message' => strtr($exception->getMessageKey(), $exception->getMessageData()),
         ];
         
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
     }
     
- 
+    
     public function supportsRememberMe(): bool
     {
         return false;
