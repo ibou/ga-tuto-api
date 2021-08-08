@@ -7,6 +7,7 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Attribute\ApiAuthGroups;
+use App\Controller\EmptyController;
 use App\Controller\PostCountController;
 use App\Controller\PostImageController;
 use App\Controller\PostPublishController;
@@ -98,8 +99,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         'image' => [
             'method' => 'POST',
             'path' => '/posts/{id}/image',
-            'controller' => PostImageController::class,
-            'deserialize' => false,
+            'controller' => EmptyController::class,
             'openapi_context' => [
                 'summary' => 'Image de l\'article',
                 "description" => "Publication d\'une image",
@@ -147,7 +147,7 @@ class Post implements UserOwnedInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(['read:collection'])]
+    #[Groups(['read:item','read:collection'])]
     private int $id;
     
     /**
@@ -172,7 +172,7 @@ class Post implements UserOwnedInterface
     /**
      * @ORM\Column(type="text")
      */
-    #[Groups(['read:item', 'write:Post'])]
+    #[Groups(['read:item', 'write:Post', 'read:collection:owner'])]
     private string $content;
     
     /**
@@ -226,6 +226,11 @@ class Post implements UserOwnedInterface
     /**
      * @Vich\UploadableField(mapping="post_image", fileNameProperty="filePath")
      */
+    #[
+        Groups([
+             'write:Post'
+        ])
+        ]
     private ?File $file;
     
     #[
