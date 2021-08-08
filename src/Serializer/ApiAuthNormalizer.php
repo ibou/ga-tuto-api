@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Serializer;
 
 use App\Attribute\ApiAuthGroups;
-use App\Entity\Post;
-use App\Security\Voter\UserOwnedVoter;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
