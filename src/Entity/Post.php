@@ -8,16 +8,20 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Attribute\ApiAuthGroups;
 use App\Controller\PostCountController;
+use App\Controller\PostImageController;
 use App\Controller\PostPublishController;
 use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Valid;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
+ * @Vich\Uploadable()
  */
 #[ApiResource(
     collectionOperations: [
@@ -84,6 +88,32 @@ use Symfony\Component\Validator\Constraints\Valid;
                         'application/json' => [
                             'schema' => [
                                 'type' => 'object',
+                            ],
+                        ],
+                    ],
+                ],
+            
+            ],
+        ],
+        'image' => [
+            'method' => 'POST',
+            'path' => '/posts/{id}/image',
+            'controller' => PostImageController::class,
+            'deserialize' => false,
+            'openapi_context' => [
+                'summary' => 'Image de l\'article',
+                "description" => "Publication d\'une image",
+                'requestBody' => [
+                    'content' => [
+                        'multipart/form-data' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'file' => [
+                                        'type' => 'string',
+                                        'format' => 'binary',
+                                    ],
+                                ],
                             ],
                         ],
                     ],
@@ -184,6 +214,24 @@ class Post implements UserOwnedInterface
         Groups(['read:collection:user']),
     ]
     private $user;
+    
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    #[
+        Groups(['read:collection']),
+    ]
+    private ?string $filePath;
+    
+    /**
+     * @Vich\UploadableField(mapping="post_image", fileNameProperty="filePath")
+     */
+    private ?File $file;
+    
+    #[
+        Groups(['read:collection']),
+    ]
+    private ?string $fileUrl = null;
     
     
     public function __construct()
@@ -297,4 +345,44 @@ class Post implements UserOwnedInterface
         
         return $this;
     }
+    
+    public function getFilePath(): ?string
+    {
+        return $this->filePath;
+    }
+    
+    public function setFilePath(?string $filePath): self
+    {
+        $this->filePath = $filePath;
+        
+        return $this;
+    }
+    
+    
+    public function getFile(): ?File
+    {
+        return $this->file;
+    }
+    
+    public function setFile(?File $file): self
+    {
+        $this->file = $file;
+        
+        return $this;
+    }
+    
+    
+    public function getFileUrl(): ?string
+    {
+        return $this->fileUrl;
+    }
+    
+    public function setFileUrl(?string $fileUrl): self
+    {
+        $this->fileUrl = $fileUrl;
+        
+        return $this;
+    }
+    
+    
 }
